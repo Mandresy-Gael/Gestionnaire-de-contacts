@@ -4,22 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionnaire de Contacts</title>
-
-    <!-- Tailwind CSS : le framework CSS qu'on charge depuis internet, pas besoin d'installer quoi que ce soit -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts : on charge les 3 polices du projet -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
     <script>
-        /* On dit à Tailwind quelles couleurs et polices on veut utiliser dans notre projet */
+
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        /* Nos 5 couleurs principales */
+                      
                         'nuit':    '#0D0D1A',   /* fond très sombre */
                         'marine':  '#1A1A2E',   /* fond des cartes */
                         'or':      '#C9A96E',   /* couleur accent dorée */
@@ -40,7 +36,7 @@
     </script>
 
     <style>
-        /* Le fond de la page avec un dégradé subtil en arrière-plan */
+        
         body {
             background-color: #0D0D1A;
             background-image:
@@ -49,14 +45,14 @@
             background-attachment: fixed;
         }
 
-        /* Effet de verre (glassmorphism) : fond semi-transparent avec flou derrière */
+      
         .glass {
             background: rgba(26, 26, 46, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
 
-        /* Légère lueur dorée autour des champs quand on clique dessus */
+     
         input:focus, select:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.35);
@@ -99,17 +95,13 @@
     <!-- py-2.5 : padding réduit pour que le navbar reste fin et discret -->
     <nav class="glass sticky top-0 z-50 border-b border-or/10 px-6 py-3 flex items-center justify-between gap-3">
 
-        <!-- Logo à gauche, taille réduite pour ne pas gonfler le navbar -->
+       
         <div class="flex items-center gap-2 flex-shrink-0">
             <span class="text-lg">👥</span>
-            <!-- Police Cormorant pour le nom du site (identité visuelle) -->
             <span class="font-titre text-2xl font-semibold text-or tracking-wide">Mes Contacts</span>
         </div>
 
-        <!-- Formulaire de recherche : envoie une requête GET /rechercher?q=... -->
-        <!-- La méthode GET est utilisée ici car on veut que la recherche soit visible dans l'URL -->
         <form action="/rechercher" method="get" class="flex gap-2 flex-1 max-w-sm">
-            <!-- input de recherche compact (hauteur réduite et texte petit pour tout aligner) -->
             <input
                 type="text"
                 name="q"
@@ -120,7 +112,6 @@
             <button type="submit" class="px-3 py-1.5 bg-or text-nuit font-corps font-semibold text-[10px] rounded-lg hover:bg-or/80 transition-all duration-200 whitespace-nowrap">
                 Rechercher
             </button>
-            <!-- Ce lien remet la liste complète en allant sur /contacts sans filtre -->
             <a href="/contacts" class="px-3 py-1.5 border border-or/20 text-creme/60 text-[10px] rounded-lg hover:border-or/40 hover:text-creme transition-all duration-200 whitespace-nowrap">
                 Effacer
             </a>
@@ -152,16 +143,12 @@
                 <h2 class="font-titre text-2xl text-or mb-6 flex items-center gap-2">
                     <span>✦</span> Nouveau Contact
                 </h2>
-
-                <!-- action="/ajouter" : envoie les données à la route POST /ajouter dans app.js -->
-                <!-- method="post" : POST car les données ne doivent pas apparaître dans l'URL -->
                 <form action="/ajouter" method="post" class="space-y-5">
 
                     <!-- Ligne 1 : Nom + Prénom côte à côte -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div class="flex flex-col gap-1.5">
                             <label for="nom" class="font-accent text-xs text-or/70 uppercase tracking-widest">Nom *</label>
-                            <!-- name="nom" : correspond à req.body.nom dans app.js -->
                             <input type="text" id="nom" name="nom" placeholder="Ex: Dupont" required
                                    class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
                         </div>
@@ -195,7 +182,6 @@
                         </div>
                         <div class="flex flex-col gap-1.5">
                             <label for="categorie" class="font-accent text-xs text-or/70 uppercase tracking-widest">Catégorie</label>
-                            <!-- select : liste déroulante, la valeur choisie sera envoyée comme req.body.categorie -->
                             <select id="categorie" name="categorie"
                                     class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60 cursor-pointer">
                                 <option value="Famille">Famille</option>
@@ -222,18 +208,15 @@
             <!-- ========================= -->
             <section class="glass border border-or/15 rounded-2xl p-8 fade-up">
 
-                <!-- En-tête du tableau avec le nombre de contacts -->
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="font-titre text-2xl text-or flex items-center gap-2">
                         <span>✦</span> Liste des Contacts
                     </h2>
-                    <!-- resultat.length : nombre d'éléments dans le tableau renvoyé par la base de données -->
                     <span class="font-accent text-xs px-3 py-1.5 rounded-full border border-or/25 text-or/80 bg-or/10">
                         <%= resultat.length %> contact(s)
                     </span>
                 </div>
 
-                <!-- Conteneur avec défilement horizontal sur mobile -->
                 <div class="overflow-x-auto rounded-xl">
                     <table class="w-full border-collapse">
                         <thead>
@@ -277,7 +260,6 @@
                                         </td>
 
                                         <td class="py-4 px-4 font-corps text-sm">
-                                            <!-- Si l'email existe, on crée un lien cliquable qui ouvre l'application email -->
                                             <% if (resultat[i].email) { %>
                                                 <a href="mailto:<%= resultat[i].email %>" class="text-or/70 hover:text-or transition-colors duration-150">
                                                     ✉️ <%= resultat[i].email %>
@@ -286,8 +268,6 @@
                                                 <span class="text-creme/25">—</span>
                                             <% } %>
                                         </td>
-
-                                        <!-- resultat[i].adresse || '—' : si l'adresse est vide, on affiche un tiret -->
                                         <td class="py-4 px-4 font-corps text-sm text-creme/70">
                                             <%= resultat[i].adresse || '—' %>
                                         </td>
@@ -336,7 +316,6 @@
                                     </tr>
                                 <% } %>
                             <% } else { %>
-                                <!-- État vide : aucun contact dans la base de données -->
                                 <tr>
                                     <td colspan="6" class="text-center py-20 text-creme/30">
                                         <div class="text-5xl mb-4">👤</div>
