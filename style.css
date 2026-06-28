@@ -1,0 +1,8 @@
+/*
+    Ce fichier CSS est maintenant vide.
+    Tout le style du projet est géré directement dans les fichiers .ejs
+    grâce à Tailwind CSS (chargé via le CDN dans chaque page).
+
+    Si tu veux ajouter du CSS personnalisé global plus tard,
+    tu peux l'écrire ici — Express le sert automatiquement via app.use(express.static("frontend")).
+*/

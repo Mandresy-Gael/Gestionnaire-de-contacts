@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier le Contact</title>
+
+    <!-- Tailwind CSS chargé depuis internet -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Les 3 polices du projet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        /* Configuration Tailwind : mêmes couleurs et polices que index.ejs */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'nuit':   '#0D0D1A',
+                        'marine': '#1A1A2E',
+                        'or':     '#C9A96E',
+                        'creme':  '#E8E0D0',
+                        'blanc':  '#FFFFFF',
+                    },
+                    fontFamily: {
+                        'titre':  ['"Cormorant Garamond"', 'serif'],
+                        'corps':  ['"DM Sans"', 'sans-serif'],
+                        'accent': ['"Space Grotesk"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Fond de page avec le même dégradé que l'accueil */
+        body {
+            background-color: #0D0D1A;
+            background-image:
+                radial-gradient(ellipse at 15% 40%, rgba(201, 169, 110, 0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, rgba(201, 169, 110, 0.04) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Effet de verre dépoli */
+        .glass {
+            background: rgba(26, 26, 46, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Lueur dorée autour des champs actifs */
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.35);
+        }
+
+        /* Animation d'entrée de la page */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.5s ease forwards; }
+
+        /* Couleur des options dans les menus déroulants */
+        select option { background-color: #1A1A2E; color: #E8E0D0; }
+
+        /* Barre de défilement personnalisée */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0D0D1A; }
+        ::-webkit-scrollbar-thumb { background: #C9A96E44; border-radius: 9999px; }
+    </style>
+</head>
+<body class="font-corps text-creme min-h-screen">
+
+    <!-- ======================================== -->
+    <!-- BARRE DE NAVIGATION                      -->
+    <!-- ======================================== -->
+    <!-- py-1.5 : navbar très fin et discret -->
+    <nav class="glass sticky top-0 z-50 border-b border-or/10 px-6 py-1.5 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+            <span class="text-lg">👥</span>
+            <span class="font-titre text-xl font-semibold text-or tracking-wide">Mes Contacts</span>
+        </div>
+        <!-- Bouton pour retourner à la liste sans faire de modifications -->
+        <a href="/contacts"
+           class="inline-flex items-center gap-2 px-3 py-1 border border-or/25 text-creme/70 text-[10px] font-corps rounded-lg hover:border-or/50 hover:text-creme transition-all duration-200">
+            ← Retour à la liste
+        </a>
+    </nav>
+
+
+    <!-- ======================================== -->
+    <!-- CONTENU PRINCIPAL                        -->
+    <!-- ======================================== -->
+    <div class="max-w-2xl mx-auto px-6 py-10">
+
+        <!-- Titre de la page -->
+        <header class="text-center mb-10 fade-up">
+            <h1 class="font-titre text-5xl font-semibold text-blanc mb-3 tracking-wide">Modifier le Contact</h1>
+            <p class="text-creme/50 font-corps text-base">Mettez à jour les informations de votre contact</p>
+            <div class="mt-4 mx-auto w-16 h-px bg-or/40"></div>
+        </header>
+
+        <main>
+            <section class="glass border border-or/15 rounded-2xl p-8 fade-up">
+
+                <!-- Aperçu du contact avec son avatar et son badge de catégorie -->
+                <div class="flex items-center gap-4 p-5 rounded-xl border border-or/15 bg-or/5 mb-8">
+                    <!-- Grand avatar avec les initiales -->
+                    <div class="w-16 h-16 rounded-full bg-or/20 border border-or/30 flex items-center justify-center flex-shrink-0">
+                        <!--
+                            "contact" est la variable envoyée par app.js via res.render("modifier", { contact: resultat[0] })
+                            .charAt(0) : première lettre, .toUpperCase() : en majuscule
+                        -->
+                        <span class="font-accent text-lg font-semibold text-or">
+                            <%= contact.prenom.charAt(0).toUpperCase() %><%= contact.nom.charAt(0).toUpperCase() %>
+                        </span>
+                    </div>
+                    <div>
+                        <h2 class="font-titre text-2xl text-blanc"><%= contact.prenom %> <%= contact.nom %></h2>
+                        <%
+                            /* On calcule la classe du badge selon la catégorie (même logique que index.ejs) */
+                            let cat = contact.categorie.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                            let badgeClass = {
+                                'famille':  'bg-emerald-500/10 text-emerald-300 border-emerald-500/25',
+                                'ami':      'bg-or/10 text-or border-or/25',
+                                'collegue': 'bg-amber-500/10 text-amber-300 border-amber-500/25',
+                                'client':   'bg-rose-500/10 text-rose-300 border-rose-500/25',
+                                'autre':    'bg-creme/5 text-creme/50 border-creme/20',
+                            }[cat] || 'bg-creme/5 text-creme/50 border-creme/20';
+                        %>
+                        <span class="font-accent text-xs px-2.5 py-1 rounded-full border <%= badgeClass %>">
+                            <%= contact.categorie %>
+                        </span>
+                    </div>
+                </div>
+
+                <!--
+                    action="/modifier/<%= contact.id %>" :
+                    L'ID du contact est injecté dans l'URL par EJS (ex: /modifier/3).
+                    La route POST /modifier/:id dans app.js reçoit ensuite ce formulaire.
+                -->
+                <form action="/modifier/<%= contact.id %>" method="post" class="space-y-5">
+
+                    <!-- Ligne 1 : Nom + Prénom -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="nom" class="font-accent text-xs text-or/70 uppercase tracking-widest">Nom *</label>
+                            <!--
+                                value="<%= contact.nom %>" : pré-remplit le champ avec la valeur actuelle.
+                                L'utilisateur voit les données existantes et peut les modifier directement.
+                            -->
+                            <input type="text" id="nom" name="nom" value="<%= contact.nom %>" required
+                                   class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="prenom" class="font-accent text-xs text-or/70 uppercase tracking-widest">Prénom *</label>
+                            <input type="text" id="prenom" name="prenom" value="<%= contact.prenom %>" required
+                                   class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
+                        </div>
+                    </div>
+
+                    <!-- Ligne 2 : Téléphone + Email -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="telephone" class="font-accent text-xs text-or/70 uppercase tracking-widest">Téléphone *</label>
+                            <input type="tel" id="telephone" name="telephone" value="<%= contact.telephone %>" required
+                                   class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="email" class="font-accent text-xs text-or/70 uppercase tracking-widest">Email</label>
+                            <!-- contact.email || '' : si l'email est vide, on met une chaîne vide pour éviter d'afficher "null" -->
+                            <input type="email" id="email" name="email" value="<%= contact.email || '' %>"
+                                   class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
+                        </div>
+                    </div>
+
+                    <!-- Ligne 3 : Adresse + Catégorie -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="adresse" class="font-accent text-xs text-or/70 uppercase tracking-widest">Adresse</label>
+                            <input type="text" id="adresse" name="adresse" value="<%= contact.adresse || '' %>"
+                                   class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60">
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="categorie" class="font-accent text-xs text-or/70 uppercase tracking-widest">Catégorie</label>
+                            <select id="categorie" name="categorie"
+                                    class="px-4 py-3 rounded-xl border border-or/20 bg-nuit/50 text-creme font-corps text-sm transition-all duration-200 focus:border-or/60 cursor-pointer">
+                                <!--
+                                    Pour chaque option, on vérifie si c'est la catégorie actuelle du contact.
+                                    Si oui, on ajoute "selected" pour que le menu affiche la bonne valeur par défaut.
+                                    Exemple : si contact.categorie = "Ami", l'option "Ami" sera déjà sélectionnée.
+                                -->
+                                <option value="Famille"  <%= contact.categorie === "Famille"  ? "selected" : "" %>>Famille</option>
+                                <option value="Ami"      <%= contact.categorie === "Ami"      ? "selected" : "" %>>Ami</option>
+                                <option value="Collègue" <%= contact.categorie === "Collègue" ? "selected" : "" %>>Collègue</option>
+                                <option value="Client"   <%= contact.categorie === "Client"   ? "selected" : "" %>>Client</option>
+                                <option value="Autre"    <%= contact.categorie === "Autre"    ? "selected" : "" %>>Autre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Boutons d'action : Annuler ou Sauvegarder -->
+                    <div class="flex items-center justify-end gap-3 pt-2">
+                        <a href="/contacts"
+                           class="px-5 py-3 border border-or/20 text-creme/60 text-sm font-corps rounded-xl hover:border-or/40 hover:text-creme transition-all duration-200">
+                            Annuler
+                        </a>
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-7 py-3 bg-or text-nuit font-corps font-semibold text-sm rounded-xl hover:bg-or/85 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-or/20 transition-all duration-200">
+                            💾 Enregistrer les modifications
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

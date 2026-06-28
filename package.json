@@ -1,0 +1,16 @@
+{
+  "name": "contacts",
+  "version": "1.0.0",
+  "description": "Gestionnaire de contacts CRUD",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.18.2",
+    "express-myconnection": "^1.0.4",
+    "mysql2": "^3.6.5",
+    "nodemon": "^3.0.2"
+  }
+}
