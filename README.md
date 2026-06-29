@@ -46,7 +46,6 @@ Le projet respecte une structure simple et claire :
 *   `frontend/` : Dossier contenant la partie visible du site.
     *   `index.ejs` : La page d'accueil (formulaire d'ajout + liste des contacts + barre de recherche).
     *   `modifier.ejs` : Le formulaire de modification d'un contact existant.
-    *   `style.css` : Fichier vide (non utilisé car Tailwind gère tout, mais laissé pour la structure d'origine).
 
 ---
 
